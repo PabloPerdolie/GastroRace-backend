@@ -3,9 +3,9 @@ package mongodb
 import (
 	"backend/internal/config"
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 )
 
 var DB *mongo.Database
@@ -24,7 +24,7 @@ func InitDB(ctx context.Context) (err error) {
 
 	DB = client.Database(config.CONFIG.DB.Name)
 
-	fmt.Println("Successfully connected to MongoDB")
+	log.Println("Successfully connected to MongoDB")
 
 	return err
 }

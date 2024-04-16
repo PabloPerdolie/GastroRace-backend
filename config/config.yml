@@ -1,0 +1,11 @@
+env: local
+
+server:
+  url: localhost:8080
+
+db:
+  user: postgres
+  password: 123456
+  name: testDB
+  host: localhost
+  port: 5433

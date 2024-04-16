@@ -2,6 +2,8 @@ package app
 
 import (
 	"backend/internal/config"
+	"backend/internal/mongodb"
+	"context"
 	"log"
 	"net/http"
 )
@@ -9,6 +11,10 @@ import (
 func Run() error {
 
 	if err := config.InitConfig(); err != nil {
+		log.Panic(err)
+	}
+
+	if err := mongodb.InitDB(context.Background()); err != nil {
 		log.Panic(err)
 	}
 

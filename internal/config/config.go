@@ -10,14 +10,11 @@ var CONFIG Config
 type Config struct {
 	Env    string `yaml:"env"`
 	Server struct {
-		URL string `yaml:"address" env-default:"0.0.0.0:3001"`
+		URL string `yaml:"url" env-default:"0.0.0.0:3001"`
 	} `yaml:"server"`
 	DB struct {
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-		Name     string `yaml:"name"`
-		Host     string `yaml:"host"`
-		Port     int64  `yaml:"port"`
+		Name string `yaml:"name"`
+		Url  string `yaml:"url"`
 	} `yaml:"db"`
 }
 

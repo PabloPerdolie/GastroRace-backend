@@ -4,8 +4,5 @@ server:
   url: 0.0.0.0:3001
 
 db:
-  user: postgres
-  password: 123456
-  name: testDB
-  host: localhost
-  port: 5433
+  url: mongodb+srv://pavel:12345qwert@cluster0.4yzizhy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+  name: gastro-race

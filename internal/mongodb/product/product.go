@@ -1,4 +1,4 @@
-package product
+package productrepo
 
 import (
 	"backend/internal/models"

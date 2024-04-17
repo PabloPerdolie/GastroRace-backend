@@ -8,8 +8,8 @@ type Product struct {
 	Description string             `json:"desc" bson:"desc"`
 	Price       int                `json:"price" bson:"price"`
 	Type        string             `json:"type" bson:"type"`
-	ImageId     interface{}        `json:"image_id" bson:"image_id"`
-	ImageData   []byte             `json:"image_data" bson:"-"`
+	ImageId     interface{}        `json:"-" bson:"image_id"`
+	ImageData   []byte             `json:"-" bson:"-"`
 }
 type User struct {
 	ID       primitive.ObjectID `json:"id" bson:"_id,omitempty"`

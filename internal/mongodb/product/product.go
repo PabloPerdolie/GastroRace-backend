@@ -10,8 +10,6 @@ import (
 	"log"
 )
 
-var db = mongodb.DB.Collection("products")
-
 func CreateProduct(ctx context.Context, product models.Product) error {
 	id := primitive.NewObjectID()
 	stream, err := mongodb.FS.OpenUploadStreamWithID(id, "image.jpg")
@@ -24,7 +22,7 @@ func CreateProduct(ctx context.Context, product models.Product) error {
 		return err
 	}
 	product.ImageId = id
-	one, err := db.InsertOne(ctx, product)
+	one, err := mongodb.ProductColl.InsertOne(ctx, product)
 	if err != nil {
 		return err
 	}
@@ -34,7 +32,7 @@ func CreateProduct(ctx context.Context, product models.Product) error {
 
 func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 	filter := bson.M{"_id": id}
-	res, err := db.DeleteOne(ctx, filter)
+	res, err := mongodb.ProductColl.DeleteOne(ctx, filter)
 	if err != nil {
 		return err
 	}
@@ -49,7 +47,7 @@ func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 
 func FindOne(ctx context.Context, id primitive.ObjectID) (prod models.Product, err error) {
 	filter := bson.M{"_id": id}
-	result := db.FindOne(ctx, filter)
+	result := mongodb.ProductColl.FindOne(ctx, filter)
 	if result.Err() != nil {
 		return models.Product{}, result.Err()
 	}
@@ -70,7 +68,7 @@ func FindOne(ctx context.Context, id primitive.ObjectID) (prod models.Product, e
 }
 
 func FindAll(ctx context.Context, id primitive.ObjectID) (prods []models.Product, err error) {
-	result, err := db.Find(ctx, bson.D{{}})
+	result, err := mongodb.ProductColl.Find(ctx, bson.D{{}})
 	if err != nil {
 		return prods, err
 	}

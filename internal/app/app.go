@@ -2,6 +2,7 @@ package app
 
 import (
 	"backend/internal/config"
+	"backend/internal/handlers"
 	"backend/internal/mongodb"
 	"context"
 	"log"
@@ -17,6 +18,8 @@ func Run() error {
 	if err := mongodb.InitDB(context.Background()); err != nil {
 		log.Panic(err)
 	}
+
+	handlers.SetupRoutes()
 
 	serverUrl := config.CONFIG.Server.URL
 	if err := http.ListenAndServe(serverUrl, nil); err != nil {

@@ -1,7 +1,14 @@
 package handlers
 
-import "github.com/gorilla/mux"
+import (
+	"backend/internal/handlers/product"
+	"github.com/gorilla/mux"
+	"net/http"
+)
 
-func SetupRoutes(r *mux.Router) {
+func SetupRoutes() {
+	r := mux.NewRouter()
+	http.Handle("/", r)
 
+	r.HandleFunc("/product", product.Create).Methods("POST")
 }

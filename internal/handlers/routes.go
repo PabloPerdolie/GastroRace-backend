@@ -11,4 +11,5 @@ func SetupRoutes() {
 	http.Handle("/", r)
 
 	r.HandleFunc("/product", product.Create).Methods("POST")
+	r.HandleFunc("/products", product.GetAll).Methods("GET")
 }

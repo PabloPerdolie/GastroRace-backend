@@ -3,6 +3,7 @@ package productrepo
 import (
 	"backend/internal/models"
 	"backend/internal/mongodb"
+	"bytes"
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
@@ -31,6 +32,11 @@ func CreateProduct(ctx context.Context, product models.Product) error {
 }
 
 func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
+	one, err := FindOne(context.Background(), id)
+	if err != nil {
+		return err
+	}
+	imageId := one.ImageId
 	filter := bson.M{"_id": id}
 	res, err := mongodb.ProductColl.DeleteOne(ctx, filter)
 	if err != nil {
@@ -42,6 +48,9 @@ func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 	}
 	log.Printf("Deleted %d documents", res.DeletedCount)
 	// todo find product to delete with ImageID from GridFS
+	if err := mongodb.FS.Delete(imageId); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -67,24 +76,22 @@ func FindOne(ctx context.Context, id primitive.ObjectID) (prod models.Product, e
 	return prod, err
 }
 
-func FindAll(ctx context.Context, id primitive.ObjectID) (prods []models.Product, err error) {
+func FindAll(ctx context.Context) (prods []models.Product, err error) {
 	result, err := mongodb.ProductColl.Find(ctx, bson.D{{}})
-	if err != nil {
-		return prods, err
+	if result.Err() != nil {
+		return prods, result.Err()
 	}
-	if err = result.Decode(&prods); err != nil {
-		return prods, err
+	if err = result.All(ctx, &prods); err != nil {
+		return prods, fmt.Errorf("failed to read file data from cursor: %v", err)
 	}
-	for _, prod := range prods {
-		downloadStream, err := mongodb.FS.OpenDownloadStream(prod.ImageId)
+	log.Println(prods)
+	for i, prod := range prods {
+		var buf bytes.Buffer
+		_, err = mongodb.FS.DownloadToStream(prod.ImageId, &buf)
 		if err != nil {
 			return prods, err
 		}
-
-		_, err = downloadStream.Read(prod.ImageData)
-		if err != nil {
-			return prods, err
-		}
+		prods[i].ImageData = buf.Bytes()
 	}
 
 	return prods, err

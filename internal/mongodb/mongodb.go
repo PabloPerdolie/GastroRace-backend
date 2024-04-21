@@ -12,6 +12,7 @@ import (
 var DB *mongo.Database
 var FS *gridfs.Bucket
 var ProductColl *mongo.Collection
+var UserColl *mongo.Collection
 
 func InitDB(ctx context.Context) (err error) {
 	clientOptions := options.Client().ApplyURI(config.CONFIG.DB.Url)
@@ -31,6 +32,7 @@ func InitDB(ctx context.Context) (err error) {
 		return err
 	}
 	ProductColl = DB.Collection("products")
+	UserColl = DB.Collection("users")
 
 	log.Println("Successfully connected to MongoDB")
 

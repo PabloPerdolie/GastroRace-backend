@@ -1,4 +1,4 @@
-package product
+package producthand
 
 import (
 	"backend/internal/models"
@@ -49,7 +49,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("Data has been succecfully saved in MongoDB")))
+	w.Write([]byte(fmt.Sprintf("Data has been successfully saved in MongoDB")))
 }
 
 func GetAll(w http.ResponseWriter, r *http.Request) {

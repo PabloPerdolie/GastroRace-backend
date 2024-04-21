@@ -1,7 +1,8 @@
 package handlers
 
 import (
-	"backend/internal/handlers/product"
+	producthand "backend/internal/handlers/product"
+	userhand "backend/internal/handlers/user"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"net/http"
@@ -17,6 +18,12 @@ func SetupRoutes() {
 
 	http.Handle("/", r)
 
-	r.HandleFunc("/product", product.Create).Methods("POST")
-	r.HandleFunc("/products", product.GetAll).Methods("GET")
+	auth := r.PathPrefix("/auth").Subrouter()
+
+	auth.HandleFunc("/signup", userhand.SignUp).Methods("POST")
+	auth.HandleFunc("/signin", userhand.SignIn).Methods("POST")
+
+	r.HandleFunc("/product", producthand.Create).Methods("POST")
+	r.HandleFunc("/products", producthand.GetAll).Methods("GET")
+
 }

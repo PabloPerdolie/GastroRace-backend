@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"backend/internal/handlers/middleware"
 	producthand "backend/internal/handlers/product"
 	userhand "backend/internal/handlers/user"
 	"github.com/gorilla/mux"
@@ -27,7 +26,7 @@ func SetupRoutes() {
 	auth.HandleFunc("/signin", userhand.SignIn).Methods("POST")
 
 	api := r.PathPrefix("/api/v1").Subrouter()
-	api.Use(middleware.Authorize)
+	//api.Use(middleware.Authorize)
 
 	cart := api.PathPrefix("/cart").Subrouter()
 	cart.HandleFunc("", userhand.GetCart).Methods("GET")

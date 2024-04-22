@@ -17,9 +17,10 @@ func SetupRoutes() {
 	})
 
 	r := mux.NewRouter()
-	r.Use(c.Handler)
 
 	http.Handle("/", r)
+
+	r.Use(c.Handler)
 
 	auth := r.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/signup", userhand.SignUp).Methods("POST")

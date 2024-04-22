@@ -17,10 +17,18 @@ type User struct {
 	Password string             `json:"password" bson:"password"`
 	Email    string             `json:"email" bson:"email"`
 	IsAdmin  bool               `json:"is_admin" bson:"is_admin"`
+	Cart     Cart               `json:"cart" bson:"cart"`
 }
 
 type Cart struct {
+	Products []primitive.ObjectID `json:"products" bson:"products"`
 }
 
 type OrdersList struct {
+	ID     primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Orders []Order
+}
+
+type Order struct {
+	Products []primitive.ObjectID `json:"products" bson:"products"`
 }

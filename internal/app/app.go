@@ -19,10 +19,8 @@ func Run() error {
 		log.Panic(err)
 	}
 
-	handlers.SetupRoutes()
-
 	serverUrl := config.CONFIG.Server.URL
-	if err := http.ListenAndServe(serverUrl, nil); err != nil {
+	if err := http.ListenAndServe(serverUrl, handlers.SetupRoutes()); err != nil {
 		log.Fatalf("server did not start work: %s", err.Error())
 		return err
 	}

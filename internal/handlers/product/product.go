@@ -13,7 +13,6 @@ import (
 )
 
 func Create(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
 		return
@@ -53,7 +52,6 @@ func Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAll(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	all, err := productrepo.FindAll(context.Background())
 	if err != nil {
 		http.Error(w, "Failed to find products", http.StatusInternalServerError)

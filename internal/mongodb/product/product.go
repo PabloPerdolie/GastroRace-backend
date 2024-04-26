@@ -13,7 +13,7 @@ import (
 
 func CreateProduct(ctx context.Context, product models.Product) error {
 	id := primitive.NewObjectID()
-	stream, err := mongodb.FS.OpenUploadStreamWithID(id, "image.jpg")
+	stream, err := mongodb.FS.OpenUploadStreamWithID(id, product.Name)
 	if err != nil {
 		return err
 	}

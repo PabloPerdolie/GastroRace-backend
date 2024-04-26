@@ -4,12 +4,11 @@ import (
 	"backend/internal/models"
 	"backend/internal/security"
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Add("Access-Control-Allow-Origin", "*")
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, "Unable to decode data", http.StatusBadRequest)
@@ -31,8 +30,6 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func SignIn(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Add("Access-Control-Allow-Origin", "*")
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, "Unable to decode data", http.StatusBadRequest)
@@ -44,6 +41,8 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to generate token", http.StatusBadRequest)
 		return
 	}
+
+	log.Println("Successful sign in with token=" + token)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(token))

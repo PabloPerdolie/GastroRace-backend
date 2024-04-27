@@ -9,5 +9,5 @@ services:
   - name: mongo
     type: web
     runtime: docker
-    dockerCommand: ./DockerfileMongo
+    #dockerCommand: ./
     healthCheckPath: /

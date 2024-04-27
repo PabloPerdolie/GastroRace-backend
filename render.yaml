@@ -5,14 +5,12 @@ services:
     dockerCommand: .
     startCommand: ./app
     healthCheckPath: /
-    envVars:
-      MONGO_URI: "mongodb://mongo:27017/mydb"
-    automaticDeploy:
-      branch: for-docker
+
 
   - name: mongo
     type: web
-    env: mongo
+    runtime: docker
+    dockerCommand: ./DockerfileMongo
     buildCommand: |
       # This service doesn't require a build step
       echo "No build command"
@@ -20,5 +18,3 @@ services:
       # This service doesn't require a start command
       echo "No start command"
     healthCheckPath: /
-    envVars:
-      MONGO_INITDB_DATABASE: mydb

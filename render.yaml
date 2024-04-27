@@ -3,7 +3,6 @@ services:
     type: web
     runtime: docker
     dockerCommand: .
-    startCommand: ./app
     healthCheckPath: /
 
 
@@ -11,10 +10,4 @@ services:
     type: web
     runtime: docker
     dockerCommand: ./DockerfileMongo
-    buildCommand: |
-      # This service doesn't require a build step
-      echo "No build command"
-    startCommand: |
-      # This service doesn't require a start command
-      echo "No start command"
     healthCheckPath: /

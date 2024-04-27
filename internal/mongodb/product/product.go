@@ -46,8 +46,11 @@ func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 	if res.DeletedCount == 0 {
 		return fmt.Errorf("product not found")
 	}
+
 	log.Printf("Deleted %d documents", res.DeletedCount)
-	// todo find product to delete with ImageID from GridFS
+	if err := mongodb.FS.Delete(imageId); err != nil {
+		return err
+	}
 	if err := mongodb.FS.Delete(imageId); err != nil {
 		return err
 	}

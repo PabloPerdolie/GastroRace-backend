@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
 	"net/http"
@@ -65,4 +66,22 @@ func GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(bytes)
+}
+
+func Delete(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	hex, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		http.Error(w, "Unable to transform id form string to ObjectId", http.StatusBadRequest)
+		return
+	}
+
+	err = productrepo.DeleteProduct(context.Background(), hex)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Unable to save data", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Data has been successfully deleted from MongoDB"))
 }

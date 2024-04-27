@@ -1,6 +1,9 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 type Product struct {
 	ID          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
@@ -30,5 +33,6 @@ type OrdersList struct {
 }
 
 type Order struct {
-	Products []primitive.ObjectID `json:"products" bson:"products"`
+	Products  []primitive.ObjectID `json:"products" bson:"products"`
+	OrderDate time.Time            `json:"order_date" bson:"order_date"`
 }

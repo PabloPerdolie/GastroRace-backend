@@ -19,7 +19,7 @@ type Config struct {
 }
 
 func InitConfig() error {
-	if err := cleanenv.ReadConfig("config/config.yml", &CONFIG); err != nil {
+	if err := cleanenv.ReadConfig("usr/local/src/config/config.yml", &CONFIG); err != nil {
 		log.Fatal(err)
 		return err
 	}

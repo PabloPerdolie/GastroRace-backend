@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  go-service:
+    build: .
+    container_name: go-service
+    ports:
+      - "3001:3001"
+    environment:
+      MONGO_URI: "mongodb://mongo:27017/mydb"  # Ссылка на MongoDB (имя хоста 'mongo' соответствует имени сервиса выше)
+
+  mongo:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mydb  # Имя базы данных MongoDB
+    volumes:
+      - mongo-data:/data/db  # Подключаем том для хранения данных MongoDB
+volumes:
+  mongo-data:

@@ -7,6 +7,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/ilyakaznacheev/cleanenv v1.5.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect

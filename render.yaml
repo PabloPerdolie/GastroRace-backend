@@ -6,8 +6,8 @@ services:
     healthCheckPath: /
 
 
-  - name: mongo
-    type: web
-    runtime: docker
+#  - name: mongo
+#    type: web
+#    runtime: docker
     #dockerCommand: ./
-    healthCheckPath: /
+#    healthCheckPath: /

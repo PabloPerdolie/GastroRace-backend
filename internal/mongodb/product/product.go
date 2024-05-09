@@ -11,24 +11,24 @@ import (
 	"log"
 )
 
-func CreateProduct(ctx context.Context, product models.Product) error {
+func CreateProduct(ctx context.Context, product models.Product) (prod models.Product, err error) {
 	id := primitive.NewObjectID()
 	stream, err := mongodb.FS.OpenUploadStreamWithID(id, product.Name)
 	if err != nil {
-		return err
+		return prod, err
 	}
 	defer stream.Close()
 	_, err = stream.Write(product.ImageData)
 	if err != nil {
-		return err
+		return prod, err
 	}
 	product.ImageId = id
 	one, err := mongodb.ProductColl.InsertOne(ctx, product)
 	if err != nil {
-		return err
+		return prod, err
 	}
 	log.Printf("Inserted with id = %v", one.InsertedID)
-	return nil
+	return product, nil
 }
 
 func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {

@@ -19,7 +19,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to create user", http.StatusBadRequest)
 		return
 	}
-	token, err := security.GenerateToken(user.Username, user.Password)
+	token, err, _ := security.GenerateToken(user.Username, user.Password)
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusBadRequest)
 		return
@@ -36,14 +36,27 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := security.GenerateToken(user.Username, user.Password)
+	token, err, isAdmin := security.GenerateToken(user.Username, user.Password)
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusBadRequest)
 		return
 	}
 
+	bytes, err := json.Marshal(struct {
+		Token   string `json:"token"`
+		IsAdmin bool   `json:"IsAdmin"`
+	}{
+		Token:   token,
+		IsAdmin: isAdmin,
+	})
+	if err != nil {
+		http.Error(w, "Failed to marshal", http.StatusInternalServerError)
+		return
+	}
+	log.Println()
+
 	log.Println("Successful sign in with token=" + token)
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(token))
+	w.Write(bytes)
 }

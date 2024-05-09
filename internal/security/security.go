@@ -40,10 +40,10 @@ func GetUser(id primitive.ObjectID) (models.User, error) {
 	return userrepo.FindByIdUser(context.Background(), id)
 }
 
-func GenerateToken(username, password string) (string, error) {
+func GenerateToken(username, password string) (string, error, bool) {
 	user, err := userrepo.FindOneUser(username, HashPassword(password))
 	if err != nil {
-		return "", err
+		return "", err, false
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
@@ -53,8 +53,8 @@ func GenerateToken(username, password string) (string, error) {
 		},
 		user.ID,
 	})
-
-	return token.SignedString([]byte(signingKey))
+	token1, err := token.SignedString([]byte(signingKey))
+	return token1, err, user.IsAdmin
 }
 
 func ParseToken(accessToken string) (id primitive.ObjectID, err error) {

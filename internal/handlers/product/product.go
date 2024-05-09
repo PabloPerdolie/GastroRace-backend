@@ -6,7 +6,6 @@ import (
 	bytes2 "bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
@@ -44,12 +43,21 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		ImageData:   buf.Bytes(),
 	}
 
-	if err := productrepo.CreateProduct(context.Background(), prod); err != nil {
+	prod, err = productrepo.CreateProduct(context.Background(), prod)
+
+	if err != nil {
 		http.Error(w, "Failed to create product", http.StatusInternalServerError)
 		return
 	}
+
+	bytes, err := json.Marshal(prod)
+	if err != nil {
+		http.Error(w, "Unable to decode data", http.StatusBadRequest)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("Data has been successfully saved in MongoDB")))
+	w.Write(bytes)
 }
 
 func GetAll(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +69,7 @@ func GetAll(w http.ResponseWriter, r *http.Request) {
 	}
 	bytes, err := json.Marshal(all)
 	if err != nil {
-		http.Error(w, "Unable to decode file", http.StatusBadRequest)
+		http.Error(w, "Unable to decode data", http.StatusBadRequest)
 		return
 	}
 	w.WriteHeader(http.StatusOK)

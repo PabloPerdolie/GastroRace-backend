@@ -51,9 +51,7 @@ func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 	if err := mongodb.FS.Delete(imageId); err != nil {
 		return err
 	}
-	if err := mongodb.FS.Delete(imageId); err != nil {
-		return err
-	}
+
 	return nil
 }
 

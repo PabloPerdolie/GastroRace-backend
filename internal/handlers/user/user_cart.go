@@ -69,7 +69,7 @@ func RemoveFromCart(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("Data has been successfully saved in MongoDB")))
+	w.Write([]byte(fmt.Sprintf("Data has been successfully removed from MongoDB")))
 }
 
 func GetCart(w http.ResponseWriter, r *http.Request) {

@@ -15,6 +15,9 @@ func AddNewOrder(ctx context.Context, order models.Order) error {
 	if err != nil {
 		return err
 	}
+	if err = ClearCart(ctx, order.UserId); err != nil {
+		return err
+	}
 	log.Printf("Inserted with id = %v", one.InsertedID)
 	return nil
 }

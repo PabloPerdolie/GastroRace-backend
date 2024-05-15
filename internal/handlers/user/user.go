@@ -25,6 +25,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("OK, SIGN UP, token =" + token)
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(token))
 }
@@ -53,9 +55,8 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to marshal", http.StatusInternalServerError)
 		return
 	}
-	log.Println()
 
-	log.Println("Successful sign in with token=" + token)
+	log.Println("OK, SIGN IN, token =" + token)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(bytes)

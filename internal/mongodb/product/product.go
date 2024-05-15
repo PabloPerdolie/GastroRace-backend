@@ -23,11 +23,10 @@ func CreateProduct(ctx context.Context, product models.Product) (prod models.Pro
 		return prod, err
 	}
 	product.ImageId = id
-	one, err := mongodb.ProductColl.InsertOne(ctx, product)
+	_, err = mongodb.ProductColl.InsertOne(ctx, product)
 	if err != nil {
 		return prod, err
 	}
-	log.Printf("Inserted with id = %v", one.InsertedID)
 	return product, nil
 }
 
@@ -47,7 +46,6 @@ func DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
 		return fmt.Errorf("product not found")
 	}
 
-	log.Printf("Deleted %d documents", res.DeletedCount)
 	if err := mongodb.FS.Delete(imageId); err != nil {
 		return err
 	}

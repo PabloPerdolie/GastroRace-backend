@@ -9,19 +9,20 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func GetCart(ctx context.Context, userId primitive.ObjectID) ([]models.Product, error) {
+func GetCart(ctx context.Context, userId primitive.ObjectID) ([]models.CartProductDTO, error) {
 	user, err := FindByIdUser(ctx, userId)
 	if err != nil {
-		return []models.Product{}, err
+		return nil, err
 	}
-	cart := make([]models.Product, len(user.Cart.Products))
+	cart := make([]models.CartProductDTO, len(user.Cart.Products))
 	for i, prodId := range user.Cart.Products {
-		one, err := productrepo.FindOne(context.Background(), prodId)
+		one, err := productrepo.FindOne(ctx, prodId)
 		if err != nil {
 			return nil, err
 		}
-		one.ImageData = nil
-		cart[i] = one
+		cart[i].Id = one.ID
+		cart[i].Price = one.Price
+		cart[i].Name = one.Name
 	}
 	return cart, err
 }
@@ -47,7 +48,7 @@ func UpdateUserCart(ctx context.Context, userId primitive.ObjectID, productId pr
 }
 
 func RemoveFromUserCart(ctx context.Context, userId primitive.ObjectID, productId primitive.ObjectID) error {
-	user, err := FindByIdUser(context.Background(), userId)
+	user, err := FindByIdUser(ctx, userId)
 	if err != nil {
 		return err
 	}
@@ -62,7 +63,21 @@ func RemoveFromUserCart(ctx context.Context, userId primitive.ObjectID, productI
 			"cart.products": user.Cart.Products,
 		},
 	}
-	_, err = mongodb.UserColl.UpdateByID(context.Background(), userId, update)
+	_, err = mongodb.UserColl.UpdateByID(ctx, userId, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ClearCart(ctx context.Context, userId primitive.ObjectID) error {
+	update := bson.M{
+		"$set": bson.M{
+			"cart.products": nil,
+		},
+	}
+
+	_, err := mongodb.UserColl.UpdateByID(ctx, userId, update)
 	if err != nil {
 		return err
 	}

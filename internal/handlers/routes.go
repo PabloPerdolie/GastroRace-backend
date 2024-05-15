@@ -29,8 +29,9 @@ func SetupRoutes() *mux.Router {
 	products.HandleFunc("", producthand.GetAll).Methods("GET", "OPTIONS")
 	products.HandleFunc("/remove", producthand.Delete).Methods("DELETE", "OPTIONS") // admin
 
-	// todo AddOrder
-	// todo GetOrders
+	orders := api.PathPrefix("/orders").Subrouter()
+	orders.HandleFunc("", userhand.AddOrder).Methods("POST", "OPTIONS")
+	orders.HandleFunc("", userhand.GetAllOrders).Methods("GET", "OPTIONS")
 
 	return r
 }

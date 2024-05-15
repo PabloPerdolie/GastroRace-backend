@@ -35,12 +35,7 @@ type OrdersList struct {
 type Order struct {
 	ID        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
 	UserId    primitive.ObjectID `json:"user_id" bson:"user_id,omitempty"`
-	Products  []OrderProduct     `json:"products" bson:"products"`
+	Products  []CartProductDTO   `json:"products" bson:"products"`
 	OrderDate time.Time          `json:"order_date" bson:"order_date"`
 	Status    string             `json:"status" bson:"status"`
-}
-
-type OrderProduct struct {
-	Name  string `json:"name" bson:"name"`
-	Price int    `json:"price" bson:"price"`
 }

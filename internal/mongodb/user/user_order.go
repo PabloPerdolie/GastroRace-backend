@@ -29,6 +29,19 @@ func GetOrders(ctx context.Context, userId primitive.ObjectID) ([]models.Order, 
 		return nil, err
 	}
 	defer cursor.Close(ctx)
+	orders := make([]models.Order, 1)
+	if err = cursor.All(ctx, &orders); err != nil {
+		return nil, err
+	}
+	return orders, nil
+}
+
+func GetAllOrders(ctx context.Context) ([]models.Order, error) {
+	cursor, err := mongodb.OrderColl.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
 
 	var orders []models.Order
 	if err = cursor.All(ctx, &orders); err != nil {

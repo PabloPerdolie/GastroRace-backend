@@ -38,4 +38,5 @@ type Order struct {
 	Products  []CartProductDTO   `json:"products" bson:"products"`
 	OrderDate time.Time          `json:"order_date" bson:"order_date"`
 	Status    string             `json:"status" bson:"status"`
+	Sum       int                `json:"sum" bson:"sum"`
 }

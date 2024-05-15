@@ -9,6 +9,7 @@ import (
 	cont "github.com/gorilla/context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -32,12 +33,19 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sum := 0
+	for _, prod := range cart {
+		i, _ := strconv.Atoi(prod.Price)
+		sum += i
+	}
+
 	order := models.Order{
 		ID:        primitive.NewObjectID(),
 		UserId:    user.Id,
 		Products:  cart,
 		OrderDate: time.Now(),
 		Status:    "CREATED",
+		Sum:       sum,
 	}
 
 	err = userrepo.AddNewOrder(context.Background(), order)
@@ -55,7 +63,7 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	w.Write(bytes)
 }
 
-func GetAllOrders(w http.ResponseWriter, r *http.Request) {
+func GetAllUserOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := cont.Get(r, "user")
 	user, ok := ctx.(middleware.UserData)
 
@@ -69,6 +77,7 @@ func GetAllOrders(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get orders from MongoDB", http.StatusBadRequest)
 		return
 	}
+
 	bytes, err := json.Marshal(orders)
 	if err != nil {
 		http.Error(w, "Failed to marshal data", http.StatusInternalServerError)
@@ -76,6 +85,10 @@ func GetAllOrders(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(bytes)
+}
+
+func GetAllOrders(w http.ResponseWriter, r *http.Request) {
+
 }
 
 //todo status change

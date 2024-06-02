@@ -32,6 +32,8 @@ func SetupRoutes() *mux.Router {
 	orders := api.PathPrefix("/orders").Subrouter()
 	orders.HandleFunc("", userhand.AddOrder).Methods("POST", "OPTIONS")
 	orders.HandleFunc("", userhand.GetAllUserOrders).Methods("GET", "OPTIONS")
+	orders.HandleFunc("/admin", userhand.GetAllOrders).Methods("GET", "OPTIONS")           // admin
+	orders.HandleFunc("/admin/status", userhand.SetOrderStatus).Methods("POST", "OPTIONS") // admin
 
 	return r
 }

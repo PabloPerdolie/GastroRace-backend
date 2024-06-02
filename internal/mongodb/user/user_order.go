@@ -47,6 +47,7 @@ func GetAllOrders(ctx context.Context) ([]models.Order, error) {
 	if err = cursor.All(ctx, &orders); err != nil {
 		return nil, err
 	}
+	log.Println(orders)
 	return orders, nil
 }
 

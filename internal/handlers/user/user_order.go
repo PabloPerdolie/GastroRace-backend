@@ -88,7 +88,34 @@ func GetAllUserOrders(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllOrders(w http.ResponseWriter, r *http.Request) {
+	ctx := cont.Get(r, "user")
+	user, ok := ctx.(middleware.UserData)
 
+	if !ok {
+		http.Error(w, "Failed to transform user data", http.StatusBadRequest)
+		return
+	}
+
+	if !user.IsAdmin {
+		http.Error(w, "Not enough rights", http.StatusLocked)
+		return
+	}
+
+	orders, err := userrepo.GetAllOrders(context.Background())
+	if err != nil {
+		http.Error(w, "Failed to get orders from MongoDB", http.StatusBadRequest)
+		return
+	}
+
+	bytes, err := json.Marshal(orders)
+	if err != nil {
+		http.Error(w, "Failed to marshal data", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(bytes)
 }
 
-//todo status change
+func SetOrderStatus(w http.ResponseWriter, r *http.Request) {
+
+}

@@ -7,6 +7,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"time"
 )
 
 func Run() error {
@@ -18,6 +19,13 @@ func Run() error {
 	if err := mongodb.InitDB(context.Background()); err != nil {
 		log.Panic(err)
 	}
+
+	go func() {
+		for {
+			time.Sleep(5 * time.Minute)
+			log.Println("Server is running and ready to accept connections")
+		}
+	}()
 
 	serverUrl := config.CONFIG.Server.URL
 	if err := http.ListenAndServe(serverUrl, handlers.SetupRoutes()); err != nil {
